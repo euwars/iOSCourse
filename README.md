@@ -5,10 +5,10 @@
 ---
 
 * اطلاعات دوره: [ایوند](https://evnd.co/4QQ4Q)
-* *محل پرسش سوالات برنامه‌نویسی : [گیت‌هاب](https://github.com/euwars/iOSCourse/issues)*
-* *ایده‌های پروژه تمرینی: [گوگل داکیومنت](https://docs.google.com/document/d/1-y9EkotdsPw9BflsGc3lGXD1mJFZ8K6YRtDSmwxB-_w/edit?usp=sharing)*
-* *بک‌اند فروشگاه برای استفاده در پروژه تمرینی: [گیت‌هاب](https://github.com/euwars/iOSCourse/tree/master/Store/Backend)*
-* *توییتر مدرس: [توییتر](https://twitter.com/euwars)*
+* محل پرسش سوالات برنامه‌نویسی : [گیت‌هاب](https://github.com/euwars/iOSCourse/issues)
+* ایده‌های پروژه تمرینی: [گوگل داکیومنت](https://docs.google.com/document/d/1-y9EkotdsPw9BflsGc3lGXD1mJFZ8K6YRtDSmwxB-_w/edit?usp=sharing)
+* بک‌اند فروشگاه برای استفاده در پروژه تمرینی: [گیت‌هاب](https://github.com/euwars/iOSCourse/tree/master/Store/Backend)
+* توییتر مدرس: [توییتر](https://twitter.com/euwars)
 
 
 سوالات برنامه‌نویسی
