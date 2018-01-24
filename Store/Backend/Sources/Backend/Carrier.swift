@@ -44,16 +44,3 @@ class Carrier: Model {
         }
     }
 }
-
-extension Store {
-    func listCarriers() {
-        do {
-            let x = try Carrier.find()
-            x.forEach { (carr) in
-                print(carr.name)
-            }
-        } catch let err {
-            print(err.localizedDescription)
-        }
-    }
-}
