@@ -7,8 +7,8 @@ let package = Package(
     name: "Backend",
     dependencies: [
         .package(url: "https://github.com/IBM-Swift/Kitura.git", .upToNextMinor(from: "2.1.3")),
-        .package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", .upToNextMinor(from: "3.1.4")),
-        .package(url: "https://github.com/mxcl/PromiseKit.git", .upToNextMinor(from: "5.0.3")),
+        .package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", .upToNextMinor(from: "4.0.0")),
+        .package(url: "https://github.com/mxcl/PromiseKit.git", .upToNextMinor(from: "5.0.5")),
         .package(url: "https://github.com/OpenKitten/Meow.git", .upToNextMinor(from: "1.0.0")),
     ],
     targets: [
