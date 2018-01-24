@@ -41,7 +41,7 @@ class Order: Model {
     
     static func userOrders(userName: String) -> Promise<[Order]> {
         return Promise<[Order]>(.pending) { seal in
-            do{
+            do {
             let orders = try Order.find("userName" == userName)
             seal.fulfill(Array(orders))
             } catch let err {
