@@ -1,4 +1,4 @@
-# Store Backend Written in Swift (macOS/Linux Ready)
+# Store Backend Written in Swift (macOS/Linux)
 
 
 ## RestAPI Endpoints
