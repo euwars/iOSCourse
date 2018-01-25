@@ -9,7 +9,6 @@ import Foundation
 import Meow
 import Kitura
 import PromiseKit
-import SwiftyJSON
 
 class Store {
     
@@ -66,11 +65,11 @@ extension Store {
         firstly {
             request.bodyVerify(parameters: ["userName", "carrierName"])
             }.then { (verified) -> Promise<Carrier> in
-                return Carrier.carrier(withName: JSON(request.body!.asJSON!)["carrierName"].stringValue)
+                return Carrier.carrier(withName: (request.body?.asJSON)!["carrierName"] as! String)
             }.then { (carrier) -> Promise<(Bool, Carrier)> in
                 return InventoryItem.hasAvaliable(carrier: carrier)
             }.then { (avcar) -> Promise<String> in
-                return Order.createOrder(carrier: avcar.1, userName: JSON(request.body!.asJSON!)["userName"].stringValue)
+                return Order.createOrder(carrier: avcar.1, userName: (request.body?.asJSON)!["userName"] as! String)
             }.done { (orderID) in
                 response.send(json: ["orderID": orderID])
             }.catch { (err) in
@@ -94,9 +93,9 @@ extension Store {
         firstly {
             request.bodyVerify(parameters: ["userName", "paymentRefrence", "orderID"])
             }.then { (verified) -> Promise<Order> in
-                return Order.order(withID: JSON(request.body!.asJSON!)["orderID"].stringValue)
+                return Order.order(withID: (request.body?.asJSON)!["orderID"] as! String)
             }.then { (order) -> Promise<String> in
-                return Order.veryifyPayment(order: order, paymentRefrence: JSON(request.body!.asJSON!)["paymentRefrence"].stringValue, userName: JSON(request.body!.asJSON!)["userName"].stringValue)
+                return Order.veryifyPayment(order: order, paymentRefrence: (request.body?.asJSON)!["paymentRefrence"] as! String, userName: (request.body?.asJSON)!["userName"] as! String)
             }.done { (code) in
                 response.send(json: ["code": code])
             }.catch { (err) in
@@ -128,7 +127,7 @@ extension RouterRequest {
             }
             
             parameters.forEach({ (key) in
-                guard (JSON(self.body!.asJSON!)[key].string != nil) else {
+                guard ((self.body?.asJSON)![key] != nil) else {
                     seal.reject(Store.Errors.missingParameter(p: key))
                     return
                 }

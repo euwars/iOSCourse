@@ -141,8 +141,8 @@
         "repositoryURL": "https://github.com/SwiftyJSON/SwiftyJSON.git",
         "state": {
           "branch": null,
-          "revision": "dadbfcffd5f51e2b488a26e83f188d96755e5393",
-          "version": "3.1.4"
+          "revision": "de309166a48a9dfc51d5bc4c55c0664d981de311",
+          "version": "4.0.0"
         }
       }
     ]

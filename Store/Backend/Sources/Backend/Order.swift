@@ -8,7 +8,6 @@
 import Foundation
 import Meow
 import PromiseKit
-import SwiftyJSON
 
 class Order: Model {
     var _id = ObjectId()
@@ -126,12 +125,18 @@ class Order: Model {
         }
     }
     
-    private static func get(url: String) -> Promise<SwiftyJSON.JSON> {
-        return Promise<SwiftyJSON.JSON>(.pending) { seal in
+    private static func get(url: String) -> Promise<[String: Any?]> {
+        return Promise<[String: Any?]>(.pending) { seal in
             let url = URL(string: url)!
             let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, err) in
                 if let hasData = data {
-                    seal.fulfill(JSON(hasData))
+                    guard let jsonObj = try? JSONSerialization.jsonObject(with: hasData, options: []),
+                        let json = jsonObj as? [String: Any] else {
+                            seal.reject(Store.Errors.unkown)
+                            return
+                    }
+                    seal.fulfill(json)
+
                 }
                 if let error = err {
                     seal.reject(error)

@@ -7,7 +7,6 @@ let package = Package(
     name: "Backend",
     dependencies: [
         .package(url: "https://github.com/IBM-Swift/Kitura.git", .upToNextMinor(from: "2.1.3")),
-        .package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", .upToNextMinor(from: "4.0.0")),
         .package(url: "https://github.com/mxcl/PromiseKit.git", .upToNextMinor(from: "5.0.5")),
         .package(url: "https://github.com/OpenKitten/Meow.git", .upToNextMinor(from: "1.0.0")),
     ],
@@ -16,6 +15,6 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "Backend",
-            dependencies: ["Kitura", "PromiseKit", "Meow", "SwiftyJSON"]),
+            dependencies: ["Kitura", "PromiseKit", "Meow"]),
     ]
 )
