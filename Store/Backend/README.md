@@ -1,4 +1,15 @@
 # Store Backend Written in Swift (macOS/Linux)
+## USAGE:
+* ibm bluemix (carriers example)[https://ioscoursestore.eu-gb.mybluemix.net/carriers]
+* docker
+```
+docker-compose up
+```
+* swift local build
+```
+swift build -c release
+./.build/release/Backend
+```
 
 
 ## RestAPI Endpoints
