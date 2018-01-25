@@ -1,5 +1,5 @@
 # Store Backend Written in Swift (macOS/Linux)
-## USAGE:
+## USAGE
 * ibm bluemix [carriers example](https://ioscoursestore.eu-gb.mybluemix.net/carriers)
 * docker
 ```
