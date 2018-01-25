@@ -37,7 +37,7 @@
 
 # `POST` /order/new
 
-** create a new order and send them for payment
+** Create a new order and send them for payment
 
 ### Request:
 
@@ -71,7 +71,7 @@
 
 # `GET` /order/user
 
-** fetch all paid/unpaid user orders
+** Fetch all paid/unpaid user orders
 
 ### Request:
 
@@ -141,7 +141,7 @@
 
 # `GET` /inventory/user
 
-** fetch prev bought user items
+** Fetch prev bought user items
 
 ### Request:
 
