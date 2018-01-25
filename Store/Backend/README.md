@@ -1,6 +1,11 @@
 # Store Backend Written in Swift (macOS/Linux)
 ## USAGE
-* ibm bluemix [carriers example](https://ioscoursestore.eu-gb.mybluemix.net/carriers)
+* Live version on ibm bluemix
+```
+// Use one of these urls
+https://ioscoursestore.eu-gb.mybluemix.net
+https://backend.xcode.ir
+```
 * docker
 ```
 docker-compose up
