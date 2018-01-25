@@ -18,6 +18,10 @@ class Store {
         case inventoryEmpty
         case missingParameter(p: String)
         case missingBody
+        case paymentVerificationFailed
+        case notAllowed
+        case outOfStock
+        case unkown
         
         public var errorDescription: String? {
             return "\(self)"
@@ -28,15 +32,18 @@ class Store {
     
     init() throws {
         do {
-            let mongoDB = try Server("mongodb://admin:PASSWORD@cluster0-shard-00-00-gipv3.mongodb.net:27017,cluster0-shard-00-01-gipv3.mongodb.net:27017,cluster0-shard-00-02-gipv3.mongodb.net:27017/admin?replicaSet=Cluster0-shard-0&ssl=true")
+            let mongoDB = try Server("mongodb://admin:iOSCourseShop@cluster0-shard-00-00-gipv3.mongodb.net:27017,cluster0-shard-00-01-gipv3.mongodb.net:27017,cluster0-shard-00-02-gipv3.mongodb.net:27017/admin?replicaSet=Cluster0-shard-0&ssl=true")
             Meow.init(mongoDB["shop"])
             
             router.all(nil, middleware: BodyParser())
             
             router.get("/carriers", handler: carriers)
             
-            router.post("/orders/new", handler: newOrder)
-            router.get("/orders/user", handler: userOrders)
+            router.post("/order/new", handler: newOrder)
+            router.get("/order/user", handler: userOrders)
+            router.post("/order/obtainCode", handler: obtainCode)
+            
+            router.get("/inventory/user", handler: userItems)
         } catch let err {
             throw err
         }
@@ -82,6 +89,33 @@ extension Store {
                 response.send(status: .notFound).send(" err: \(err.localizedDescription)")
         }
     }
+    
+    func obtainCode(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) {
+        firstly {
+            request.bodyVerify(parameters: ["userName", "paymentRefrence", "orderID"])
+            }.then { (verified) -> Promise<Order> in
+                return Order.order(withID: JSON(request.body!.asJSON!)["orderID"].stringValue)
+            }.then { (order) -> Promise<String> in
+                return Order.veryifyPayment(order: order, paymentRefrence: JSON(request.body!.asJSON!)["paymentRefrence"].stringValue, userName: JSON(request.body!.asJSON!)["userName"].stringValue)
+            }.done { (code) in
+                response.send(json: ["code": code])
+            }.catch { (err) in
+                response.send(status: .notAcceptable).send(" err: \(err.localizedDescription)")
+        }
+    }
+    
+    func userItems(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) {
+        firstly {
+            request.queryVerify(parameters: ["userName"])
+            }.then { (verified) -> Promise<[InventoryItem]> in
+                return InventoryItem.userItems(userName: request.queryParameters["userName"]!)
+            }.done { (items) in
+                response.send(json: items)
+            }.catch { (err) in
+                response.send(status: .notFound).send(" err: \(err.localizedDescription)")
+        }
+    }
+    
 }
 
 extension RouterRequest {

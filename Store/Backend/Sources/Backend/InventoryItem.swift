@@ -15,12 +15,14 @@ class InventoryItem: Model {
     var code: String
     var isActive: Bool
     var orderID: String?
+    var userName: String?
     
-    init(carrier: Reference<Carrier>, code: String, isActive: Bool, orderID: String? = nil) {
+    init(carrier: Reference<Carrier>, code: String, isActive: Bool, orderID: String? = nil, userName: String? = nil) {
         self.carrier = carrier
         self.code = code
         self.isActive = isActive
         self.orderID = orderID
+        self.userName = userName
     }
     
     static func hasAvaliable(carrier: Carrier) -> Promise<(Bool, Carrier)> {
@@ -32,6 +34,17 @@ class InventoryItem: Model {
                 }else{
                     seal.reject(Store.Errors.inventoryEmpty)
                 }
+            } catch let err {
+                seal.reject(err)
+            }
+        }
+    }
+    
+    static func userItems(userName: String) -> Promise<[InventoryItem]> {
+        return Promise<[InventoryItem]>(.pending) { seal in
+            do {
+                let items = try InventoryItem.find("isActive" == false && "userName" == userName)
+                seal.fulfill(Array(items))
             } catch let err {
                 seal.reject(err)
             }
