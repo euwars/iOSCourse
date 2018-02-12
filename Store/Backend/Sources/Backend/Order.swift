@@ -65,38 +65,35 @@ class Order: Model {
     static func veryifyPayment(order: Order, paymentRefrence: String, userName: String) -> Promise<String> {
         return Promise<String>(.pending) { seal in
             do {
-                if (order.paymentRefrence == nil) && order.userName == userName {
-                    // Make sure paymentRefrence has not been used before
-                    if try Order.count("paymentRefrence" == paymentRefrence, limitedTo: nil, skipping: nil) == 0 {
-                        // safe to move forward
-                        verifyPayir(paymentRefrence: paymentRefrence).done({ (verified) in
-                            // Payment Verified
-                            // Assing an inventory Item to user
-                            if let optimalInventory = try InventoryItem.findOne("carrier" == order.carrier && "isActive" == true && "userName" == nil) {
-                                // Optimal inventoy found
-                                optimalInventory.isActive = false
-                                optimalInventory.userName = userName
-                                try optimalInventory.save()
-                                
-                                order.paymentRefrence = paymentRefrence
-                                order.isPaid = true
-                                try order.save()
-                                
-                                seal.fulfill(optimalInventory.code)
-                            }else{
-                                seal.reject(Store.Errors.outOfStock)
-                            }
-                        }).catch({ (err) in
-                            seal.reject(err)
-                        })
-                    }else{
-                        // reusing same payment refrence not allowed
-                        seal.reject(Store.Errors.paymentVerificationFailed)
-                    }
-                }else{
+                // Make sure paymentRefrence has not been used before
+                guard (order.paymentRefrence == nil) && order.userName == userName else {
                     // Order already has been processed
-                    seal.reject(Store.Errors.notAllowed)
+                    throw Store.Errors.notAllowed
                 }
+                
+                // safe to move forward
+                guard try Order.count("paymentRefrence" == paymentRefrence, limitedTo: nil, skipping: nil) == 0 else {
+                    // reusing same payment refrence not allowed
+                    throw Store.Errors.paymentVerificationFailed
+                }
+                
+                _ = verifyPayir(paymentRefrence: paymentRefrence).done({ (verified) in
+                    // Payment Verified
+                    guard let optimalInventory = try InventoryItem.findOne("carrier" == order.carrier && "isActive" == true && "userName" == nil) else {
+                        throw Store.Errors.outOfStock
+                    }
+                    
+                    // Assing an inventory Item to user
+                    optimalInventory.isActive = false
+                    optimalInventory.userName = userName
+                    try optimalInventory.save()
+                    
+                    order.paymentRefrence = paymentRefrence
+                    order.isPaid = true
+                    try order.save()
+                    
+                    seal.fulfill(optimalInventory.code)
+                })
             } catch let err {
                 seal.reject(err)
             }
@@ -136,7 +133,7 @@ class Order: Model {
                             return
                     }
                     seal.fulfill(json)
-
+                    
                 }
                 if let error = err {
                     seal.reject(error)
